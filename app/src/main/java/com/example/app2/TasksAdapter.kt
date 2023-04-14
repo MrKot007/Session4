@@ -1,13 +1,16 @@
 package com.example.app2
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app2.databinding.TaskItemBinding
+import java.text.SimpleDateFormat
+import java.util.*
 
 class TaskViewHolder(var binding: TaskItemBinding) : RecyclerView.ViewHolder(binding.root)
 class TasksAdapter(val list: List<ModelTask>) : RecyclerView.Adapter<TaskViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
-        TODO("Not yet implemented")
+        return TaskViewHolder(TaskItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun getItemCount(): Int {
@@ -15,7 +18,33 @@ class TasksAdapter(val list: List<ModelTask>) : RecyclerView.Adapter<TaskViewHol
     }
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
-        
+        holder.binding.name.text = list[position].title
+        val hour = list[position].duration / 60
+        holder.binding.duration.text = "$hour ${getHourText(hour)}"
+        if (list[position].isComplete) {
+            holder.binding.status.text = "выполнено"
+            holder.binding.statusBgc.setCardBackgroundColor(holder.binding.root.context.getColor(R.color.task_complete))
+        }else {
+            val dateLesson: Date = SimpleDateFormat("dd.MM.yyyy hh:mm", Locale.getDefault()).parse(list[position].datetime)
+            val today = Date()
+            if (today.time < dateLesson.time) {
+                holder.binding.status.text = "начать"
+                holder.binding.statusBgc.setCardBackgroundColor(holder.binding.root.context.getColor(R.color.task_not_complete))
+            }else {
+                holder.binding.status.text = "просрочено"
+                holder.binding.statusBgc.setCardBackgroundColor(holder.binding.root.context.getColor(R.color.task_not_complete))
+            }
+        }
+    }
+
+    private fun getHourText(hour: Int): String {
+        if (hour%10 == 1 && hour != 11) {
+            return "час"
+        }
+        if (hour%10 in listOf(2, 3, 4)) {
+            return "часа"
+        }
+        return "часов"
     }
 
 }
