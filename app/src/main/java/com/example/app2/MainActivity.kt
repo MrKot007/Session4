@@ -63,12 +63,14 @@ class MainActivity : AppCompatActivity() {
                 })
                 binding.mainCourseRec.layoutManager = LinearLayoutManager(this@MainActivity)
                 binding.mainCourseRec.adapter!!.notifyDataSetChanged()
+                binding.mainCourseRec.visibility = View.VISIBLE
                 binding.noPlans.visibility = View.GONE
             }
 
             override fun onError(error: String) {
                 Log.e("ERRROR", error)
                 binding.noPlans.visibility = View.VISIBLE
+                binding.mainCourseRec.visibility = View.GONE
             }
         }, this)
     }

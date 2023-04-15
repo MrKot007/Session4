@@ -38,7 +38,7 @@ class TasksAdapter(val list: List<ModelTask>, val onClickTask: OnClickTask) : Re
             )
             params.setMargins(160, 12, 12, 12)
             holder.binding.constr.layoutParams = params
-            //holder.binding.statusBgc.setCardBackgroundColor(holder.binding.root.context.getColor(R.color.task_complete))
+
         }else {
             val dateLesson: Date = SimpleDateFormat("dd.MM.yyyy hh:mm", Locale.getDefault()).parse(list[position].datetime)
             val today = Date()
@@ -52,10 +52,16 @@ class TasksAdapter(val list: List<ModelTask>, val onClickTask: OnClickTask) : Re
                 holder.binding.status.text = "начать"
                 holder.binding.statusBgc.setCardBackgroundColor(holder.binding.root.context.getColor(R.color.task_not_complete))
             }else {
+                val params = LayoutParams(
+                    LayoutParams.WRAP_CONTENT,
+                    LayoutParams.WRAP_CONTENT
+                )
+                params.setMargins(160, 12, 12, 12)
+                holder.binding.constr.layoutParams = params
                 val delayTime = abs(((dateLesson.time - today.time)/3600000/24).toInt())
                 holder.binding.status.text = "просрочено - ${delayTime} ${getHourText(delayTime)}"
                 holder.binding.duration.visibility = View.GONE
-                //holder.binding.statusBgc.setCardBackgroundColor(holder.binding.root.context.getColor(R.color.task_not_complete))
+
             }
         }
     }
