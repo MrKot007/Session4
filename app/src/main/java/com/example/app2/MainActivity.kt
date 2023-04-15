@@ -1,5 +1,6 @@
 package com.example.app2
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -17,11 +18,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        refreshRecycler()
 
         api.getDelayed().push(object: OnGetData<List<ModelTask>>{
             override fun onGet(data: List<ModelTask>) {
-                binding.expiredRec.adapter = TasksAdapter(data)
+                binding.expiredRec.adapter = TasksAdapter(data, object: OnClickTask {
+                    override fun onClick(task: ModelTask) {
+                        val taskIntent = Intent(this@MainActivity, TaskActivity::class.java)
+                        taskIntent.putExtra("name", task.title)
+                        taskIntent.putExtra("description", task.description)
+                        startActivity(taskIntent)
+                    }
+
+                })
                 binding.expiredRec.layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
             }
 
@@ -43,15 +52,22 @@ class MainActivity : AppCompatActivity() {
                 date  = dateStr
                 binding.date.text = dateStr
                 setTimeStamp(dateStr)
-                binding.date.text = dateStr
-                binding.mainCourseRec.adapter = TasksAdapter(data)
+                binding.mainCourseRec.adapter = TasksAdapter(data, object: OnClickTask {
+                    override fun onClick(task: ModelTask) {
+                        val taskIntent = Intent(this@MainActivity, TaskActivity::class.java)
+                        taskIntent.putExtra("name", task.title)
+                        taskIntent.putExtra("description", task.description)
+                        startActivity(taskIntent)
+                    }
+                })
+                binding.mainCourseRec.layoutManager = LinearLayoutManager(this@MainActivity)
                 binding.mainCourseRec.adapter!!.notifyDataSetChanged()
-                binding.noPlans.visibility = View.VISIBLE
+                binding.noPlans.visibility = View.GONE
             }
 
             override fun onError(error: String) {
                 Log.e("ERRROR", error)
-                binding.noPlans.visibility = View.GONE
+                binding.noPlans.visibility = View.VISIBLE
             }
         }, this)
     }

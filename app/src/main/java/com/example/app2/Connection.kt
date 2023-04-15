@@ -8,7 +8,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-
+//Объект соединения
 object Connection {
     val retrofit = Retrofit.Builder()
         .baseUrl("http://95.31.130.149:8085/")
@@ -16,6 +16,7 @@ object Connection {
         .build()
     val api = retrofit.create(API::class.java)
 }
+//Функция, расширяющая класс Call для быстрой обработки полученных данных
 fun <T> Call<T>.push(onGetData: OnGetData<T>, context: Context) {
     enqueue(object: Callback<T> {
         override fun onResponse(call: Call<T>, response: Response<T>) {
@@ -38,6 +39,7 @@ fun <T> Call<T>.push(onGetData: OnGetData<T>, context: Context) {
 
     })
 }
+//Интерфейс, описывающий методы обработки полученных данных
 interface OnGetData<T> {
     fun onGet(data: T)
     fun onError(error: String)

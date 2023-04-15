@@ -1,14 +1,18 @@
 package com.example.app2
 
+import android.app.ActionBar.LayoutParams
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.marginTop
+import androidx.core.view.setMargins
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app2.databinding.TaskItemBinding
 import java.text.SimpleDateFormat
 import java.util.*
-
+//ViewHolder for task
 class TaskViewHolder(var binding: TaskItemBinding) : RecyclerView.ViewHolder(binding.root)
-class TasksAdapter(val list: List<ModelTask>) : RecyclerView.Adapter<TaskViewHolder>() {
+//
+class TasksAdapter(val list: List<ModelTask>, val onClickTask: OnClickTask) : RecyclerView.Adapter<TaskViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         return TaskViewHolder(TaskItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
@@ -23,16 +27,28 @@ class TasksAdapter(val list: List<ModelTask>) : RecyclerView.Adapter<TaskViewHol
         holder.binding.duration.text = "$hour ${getHourText(hour)}"
         if (list[position].isComplete) {
             holder.binding.status.text = "выполнено"
-            holder.binding.statusBgc.setCardBackgroundColor(holder.binding.root.context.getColor(R.color.task_complete))
+            val params = LayoutParams(
+                LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT
+            )
+            params.setMargins(12, 12, 12, 12)
+            holder.binding.constr.layoutParams = params
+            //holder.binding.statusBgc.setCardBackgroundColor(holder.binding.root.context.getColor(R.color.task_complete))
         }else {
             val dateLesson: Date = SimpleDateFormat("dd.MM.yyyy hh:mm", Locale.getDefault()).parse(list[position].datetime)
             val today = Date()
             if (today.time < dateLesson.time) {
+                val params = LayoutParams(
+                    LayoutParams.WRAP_CONTENT,
+                    LayoutParams.WRAP_CONTENT
+                )
+                params.setMargins(12, 12, 12, 12)
+                holder.binding.constr.layoutParams = params
                 holder.binding.status.text = "начать"
                 holder.binding.statusBgc.setCardBackgroundColor(holder.binding.root.context.getColor(R.color.task_not_complete))
             }else {
                 holder.binding.status.text = "просрочено"
-                holder.binding.statusBgc.setCardBackgroundColor(holder.binding.root.context.getColor(R.color.task_not_complete))
+                //holder.binding.statusBgc.setCardBackgroundColor(holder.binding.root.context.getColor(R.color.task_not_complete))
             }
         }
     }
@@ -47,4 +63,7 @@ class TasksAdapter(val list: List<ModelTask>) : RecyclerView.Adapter<TaskViewHol
         return "часов"
     }
 
+}
+interface OnClickTask {
+    fun onClick(task: ModelTask)
 }
