@@ -2,11 +2,13 @@ package com.example.app2
 
 import android.app.ActionBar.LayoutParams
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.marginTop
 import androidx.core.view.setMargins
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app2.databinding.TaskItemBinding
+import java.lang.Math.abs
 import java.text.SimpleDateFormat
 import java.util.*
 //ViewHolder for task
@@ -31,7 +33,7 @@ class TasksAdapter(val list: List<ModelTask>, val onClickTask: OnClickTask) : Re
                 LayoutParams.WRAP_CONTENT,
                 LayoutParams.WRAP_CONTENT
             )
-            params.setMargins(12, 12, 12, 12)
+            params.setMargins(160, 12, 12, 12)
             holder.binding.constr.layoutParams = params
             //holder.binding.statusBgc.setCardBackgroundColor(holder.binding.root.context.getColor(R.color.task_complete))
         }else {
@@ -42,12 +44,14 @@ class TasksAdapter(val list: List<ModelTask>, val onClickTask: OnClickTask) : Re
                     LayoutParams.WRAP_CONTENT,
                     LayoutParams.WRAP_CONTENT
                 )
-                params.setMargins(12, 12, 12, 12)
+                params.setMargins(160, 12, 12, 12)
                 holder.binding.constr.layoutParams = params
                 holder.binding.status.text = "начать"
                 holder.binding.statusBgc.setCardBackgroundColor(holder.binding.root.context.getColor(R.color.task_not_complete))
             }else {
-                holder.binding.status.text = "просрочено"
+                val delayTime = abs(((dateLesson.time - today.time)/3600000/24).toInt())
+                holder.binding.status.text = "просрочено - ${delayTime} ${getHourText(delayTime)}"
+                holder.binding.duration.visibility = View.GONE
                 //holder.binding.statusBgc.setCardBackgroundColor(holder.binding.root.context.getColor(R.color.task_not_complete))
             }
         }
