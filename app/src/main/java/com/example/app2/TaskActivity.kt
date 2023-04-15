@@ -10,6 +10,11 @@ class TaskActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityTaskBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        binding.deadLine.text = intent.getStringExtra("date")
+        binding.taskHeading.text = intent.getStringExtra("name")
+        binding.descr.text = intent.getStringExtra("description")
+        binding.back.setOnClickListener {
+            finish()
+        }
     }
 }

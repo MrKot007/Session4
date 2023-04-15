@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity() {
                         val taskIntent = Intent(this@MainActivity, TaskActivity::class.java)
                         taskIntent.putExtra("name", task.title)
                         taskIntent.putExtra("description", task.description)
+                        taskIntent.putExtra("date", task.datetime)
                         startActivity(taskIntent)
                     }
                 })

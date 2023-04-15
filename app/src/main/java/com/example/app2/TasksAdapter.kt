@@ -27,6 +27,9 @@ class TasksAdapter(val list: List<ModelTask>, val onClickTask: OnClickTask) : Re
         holder.binding.name.text = list[position].title
         val hour = list[position].duration / 60
         holder.binding.duration.text = "$hour ${getHourText(hour)}"
+        holder.binding.body.setOnClickListener {
+            onClickTask.onClick(list[position])
+        }
         if (list[position].isComplete) {
             holder.binding.status.text = "выполнено"
             val params = LayoutParams(
